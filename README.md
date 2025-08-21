@@ -99,73 +99,101 @@ git clone https://github.com/yashk1103/security.git
 cd security
 ```
 
-## Quick Start
+## How to Run Your Code
 
 ### Method 1: Direct Compilation (Recommended)
 
-#### Step 1: Open Command Prompt as Administrator
 ```powershell
-# Open PowerShell as Administrator
-# Navigate to project directory
-cd path\to\security
-```
+# Navigate to your project directory
+cd "D:\Startup\SecureMessaging"
 
-#### Step 2: Compile
-```powershell
-# Set up Visual Studio environment and compile
+# Compile and run
 cmd /c '"C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" && cl /EHsc /std:c++17 /I include /I "C:\Program Files\OpenSSL-Win64\include" src\interactive_secure_message.cpp /Fe:interactive_demo.exe /link "C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD\libcrypto.lib" "C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib" ws2_32.lib crypt32.lib'
-```
 
-#### Step 3: Run
-```powershell
+# Run the executable
 .\interactive_demo.exe
 ```
 
-### Method 2: Using CMake (Alternative)
+### Method 2: Using CMake
 
-#### Step 1: Create Build Directory
 ```powershell
-mkdir build
+cd "D:\Startup\SecureMessaging"
+mkdir build -Force
 cd build
-```
-
-#### Step 2: Configure with OpenSSL Path
-```powershell
-cmake .. -A x64 -DOPENSSL_ROOT_DIR="C:\Program Files\OpenSSL-Win64"
-```
-
-#### Step 3: Build
-```powershell
+cmake .. -A x64
 cmake --build . --config Release
-```
-
-#### Step 4: Run
-```powershell
 .\Release\interactive_secure_message.exe
 ```
 
-## Usage Example
+## Expected Demo Flow
 
+When you run the application, you will experience the following interactive demonstration:
+
+### Startup and Input
 ```
-Enter your message: Project funding is approved.
-Enter your password: my-super-secret-key
+=== AES-512 Secure Message Encryption System ===
 
-+-- STEP 1: Start with Original Message --
-| Input:  None (starting data)
-| Output: "Project funding is approved."
-+----------------------------------------
-
-Press Enter to continue to Step 2...
-
-+-- STEP 2: Generate SHA-512 Hash --
-| Input:  "Project funding is approved."
-| Output: "852aa39ddceae738ed3be5510c5eb17a..."
-+----------------------------------
-
-[... continues through all 7 steps ...]
-
-Final Base64 Output: "xXFNUCEb+gkf8uDRCgiVperxAaYLD2..."
+Enter your message: Hello World
+Enter your password: mySecretKey123
 ```
+
+### Encryption Process
+```
+=== SENDER SIDE: CREATING SECURE MESSAGE ===
+
++-------------------------------------------------------------------+
+| STEP 1: Start with Original Message                              |
++-------------------------------------------------------------------+
+| Input:  None (starting data)                                     |
+| Output: "Hello World"                                            |
++-------------------------------------------------------------------+
+
+Press ENTER to continue to next step (or 'q' + ENTER to quit):
+
++-------------------------------------------------------------------+
+| STEP 2: Generate SHA-512 Hash                                    |
++-------------------------------------------------------------------+
+| Input:  "Hello World"                                            |
+| Output: "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e"|
++-------------------------------------------------------------------+
+
+[... continues through all 7 encryption steps ...]
+
+[SUCCESS] TRANSMISSION READY:
+Base64 Message: xXFNUCEb+gkf8uDRCgiVperxAaYLD2...
+```
+
+### Decryption Process
+```
+=== STARTING DECRYPTION DEMO ===
+Enter the Base64 encrypted string to decrypt: [paste the Base64 output]
+
+=== RECEIVER SIDE: VERIFYING AND READING MESSAGE ===
+
++-------------------------------------------------------------------+
+| STEP 1r: Receive Base64 Data                                     |
++-------------------------------------------------------------------+
+| Input:  Transmission received                                    |
+| Output: Base64 encoded string                                    |
++-------------------------------------------------------------------+
+
+[... continues through all 7 decryption steps ...]
+
+[SUCCESS] FINAL RESULT:
+Decrypted Message: "Hello World"
+Integrity Status: VERIFIED [OK]
+```
+
+### Demo Instructions
+
+1. **Start the program**
+2. **Enter your message**: e.g., "Project funding approved"
+3. **Enter your password**: e.g., "my-super-secret-key"
+4. **Follow encryption steps**: Press ENTER between each step
+5. **Copy the Base64 output**: The long encrypted string
+6. **Paste it for decryption**: When prompted
+7. **Watch decryption**: Press ENTER between each step
+8. **See verification**: Message integrity confirmed
 
 ## Troubleshooting
 
@@ -366,25 +394,3 @@ SUCCESS: Messages match! Encryption/Decryption working correctly.
 - Production use requires additional security considerations
 - Key management and secure storage not implemented
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is for educational purposes. Please ensure compliance with local cryptography regulations.
-
-## References
-
-- [OpenSSL Documentation](https://www.openssl.org/docs/)
-- [NIST Cryptographic Standards](https://csrc.nist.gov/)
-- [RFC 3962 - AES-CBC](https://tools.ietf.org/html/rfc3962)
-- [PBKDF2 Specification](https://tools.ietf.org/html/rfc2898)
-
----
-
-**Warning**: This implementation is for educational and demonstration purposes. For production use, consult with cryptography experts and ensure compliance with security policies and regulations.

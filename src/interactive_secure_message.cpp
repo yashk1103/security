@@ -431,3 +431,41 @@ void InteractiveSecureMessage::displayStep(const std::string& title, const std::
 }
 
 }
+int main() {
+    try {
+        std::string message, password;
+        
+        std::cout << "=== AES-512 Secure Message Encryption System ===\n\n";
+        
+        std::cout << "Enter your message: ";
+        std::getline(std::cin, message);
+        
+        std::cout << "Enter your password: ";
+        std::getline(std::cin, password);
+        
+        // Create crypto instance
+        SecureMessaging::InteractiveSecureMessage crypto(password);
+        
+        // Run encryption demonstration
+        crypto.runInteractiveEncryption(message);
+        
+        // Get the encrypted data for decryption demo
+        // For this demo, we need to simulate receiving the encrypted data
+        std::cout << "\n=== STARTING DECRYPTION DEMO ===\n";
+        std::cout << "Enter the Base64 encrypted string to decrypt: ";
+        std::string encryptedData;
+        std::getline(std::cin, encryptedData);
+        
+        // Create new crypto instance for receiver (with same password)
+        SecureMessaging::InteractiveSecureMessage receiver(password);
+        
+        // Run decryption demonstration
+        receiver.runInteractiveDecryption(encryptedData);
+        
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
+    
+    return 0;
+}
