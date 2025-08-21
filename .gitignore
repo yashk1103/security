@@ -1,0 +1,106 @@
+# Build directories
+build/
+Release/
+Debug/
+x64/
+x86/
+out/
+
+# Visual Studio files
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+*.sln.docstates
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Compiled executables
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.obj
+*.lib
+*.exp
+*.iobj
+*.ipdb
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.tlog
+
+# IDE files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/c_cpp_properties.json
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Package manager directories
+vcpkg_installed/
+packages/
+
+# OpenSSL binaries (if locally installed)
+openssl/
+OpenSSL-Win64/
+
+# Test output files
+test_output/
+*.test
+
+# Sensitive files (in case someone accidentally commits keys)
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.txt
+config.json
+
+# Documentation build
+docs/_build/
+*.pdf
+
+# Profiling data
+*.prof
+*.gprof
+
+# Memory leak reports
+*.vld
+
+# Code coverage
+*.gcov
+*.gcno
+*.gcda
+coverage/
+
+# Static analysis
+*.sarif
