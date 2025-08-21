@@ -64,7 +64,7 @@ cd SecureMessaging
 cd SecureMessaging
 
 # Compile and run in one command
-cmd /c '"C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" && cl /EHsc /std:c++17 /I include /I "C:\Program Files\OpenSSL-Win64\include" src\interactive_main.cpp src\interactive_secure_message.cpp /Fe:interactive_demo.exe /link "C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD\libcrypto.lib" "C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib" ws2_32.lib crypt32.lib && interactive_demo.exe'
+cmd /c '"C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat" && cl /EHsc /std:c++17 /I include /I "C:\Program Files\OpenSSL-Win64\include" src\interactive_secure_message.cpp /Fe:interactive_demo.exe /link "C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD\libcrypto.lib" "C:\Program Files\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib" ws2_32.lib crypt32.lib && interactive_demo.exe'
 ```
 
 ### Method 2: Using CMake
@@ -79,7 +79,7 @@ cmake .. -A x64
 cmake --build . --config Release
 
 # Run executable
-.\Release\interactive_main.exe
+.\Release\interactive_secure_message.exe
 ```
 
 ## Usage Example
@@ -105,6 +105,34 @@ Press Enter to continue to Step 2...
 Final Base64 Output: "xXFNUCEb+gkf8uDRCgiVperxAaYLD2..."
 ```
 
+## Core Methods Implementation
+
+The system implements 4 essential C++ methods using OpenSSL:
+
+### 1. generateHash()
+- **Input**: Plain text message
+- **Algorithm**: SHA-512
+- **Output**: 128-character hexadecimal hash
+- **Purpose**: Message integrity verification
+
+### 2. generateKey()
+- **Input**: Password + 32-byte random salt
+- **Algorithm**: PBKDF2-HMAC-SHA512 with 500,000 iterations
+- **Output**: 512-bit (64 bytes) encryption key
+- **Purpose**: Secure key derivation from password
+
+### 3. encrypt()
+- **Input**: Combined message+hash + 512-bit key
+- **Algorithm**: Dual AES-256-CBC encryption
+- **Output**: Encrypted binary data with embedded IVs
+- **Purpose**: AES-512 equivalent secure encryption
+
+### 4. decrypt()
+- **Input**: Encrypted data + 512-bit key
+- **Algorithm**: Reverse dual AES-256-CBC decryption
+- **Output**: Original plaintext message
+- **Purpose**: Complete decryption and verification
+
 ## Cryptographic Process
 
 ### Encryption Flow (7 Steps)
@@ -119,7 +147,7 @@ Final Base64 Output: "xXFNUCEb+gkf8uDRCgiVperxAaYLD2..."
 ### Security Parameters
 - **Key Size**: 512-bit (dual 256-bit keys)
 - **Salt Size**: 256-bit (32 bytes) random
-- **IV Size**: 128-bit (16 bytes) random
+- **IV Size**: 128-bit (16 bytes) random per encryption layer
 - **Hash Algorithm**: SHA-512
 - **Iterations**: 500,000 (PBKDF2)
 
@@ -128,8 +156,7 @@ Final Base64 Output: "xXFNUCEb+gkf8uDRCgiVperxAaYLD2..."
 ```
 SecureMessaging/
 ├── src/
-│   ├── interactive_main.cpp          # Main demo application
-│   └── interactive_secure_message.cpp # Core crypto implementation
+│   └── interactive_secure_message.cpp # Complete implementation with main()
 ├── include/
 │   └── interactive_secure_message.h   # Header definitions
 ├── build/                             # Build artifacts (git-ignored)
@@ -153,6 +180,7 @@ SecureMessaging/
 - **IV Usage**: Ensuring encryption uniqueness
 - **Hash Verification**: Detecting message tampering
 - **Base64 Encoding**: Safe binary-to-text conversion
+- **Dual Encryption**: Cascaded AES for enhanced security
 
 ## Technical Specifications
 
@@ -185,12 +213,30 @@ SecureMessaging/
 - Message authentication and integrity verification
 - No hardcoded secrets or keys
 - Resistant to timing attacks
+- Dual encryption provides enhanced security
 
 ### Important Notes
 - Keys derived from passwords are only as strong as the password
 - This is for educational/demonstration purposes
 - Production use requires additional security considerations
 - Key management and secure storage not implemented
+
+## Testing
+
+### Manual Testing
+```powershell
+# Test with different message types
+.\interactive_demo.exe
+# Enter: "Hello World" / "password123"
+# Enter: "Special chars: !@#$%^&*()" / "complex-pass-2024"
+# Enter: "" / "empty-message-test"
+```
+
+### Verification Steps
+1. Message integrity verification through hash comparison
+2. Encryption/decryption round-trip testing
+3. Different password validation
+4. Special character handling
 
 ## Contributing
 
