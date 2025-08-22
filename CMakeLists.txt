@@ -4,6 +4,9 @@ project(SecureMessaging VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Find Java and JNI
+find_package(JNI REQUIRED)
+
 # Set OpenSSL paths manually for Windows
 if(WIN32)
     set(OPENSSL_ROOT_DIR "C:/Program Files/OpenSSL-Win64")
@@ -25,42 +28,40 @@ else()
 endif()
 
 include_directories(include)
+include_directories(${JNI_INCLUDE_DIRS})
 
-# Main demo executable
-add_executable(secure_message 
-    src/main.cpp
-    src/secure_message.cpp
+# Core crypto library
+add_library(secure_crypto_core STATIC
+    src/secure_crypto_core.cpp
 )
 
-# Test executable
-add_executable(test_secure_message
-    src/test.cpp
-    src/secure_message.cpp
+# Standalone executable using core
+add_executable(secure_crypto
+    src/secure_crypto.cpp
 )
 
-# Interactive demo executable (the one you want to run)
-add_executable(interactive_secure_message
-    src/interactive_main.cpp
-    src/interactive_secure_message.cpp
-    src/secure_message.cpp
+# JNI shared library using core
+add_library(secure_crypto_jni SHARED
+    src/secure_crypto_jni.cpp
 )
 
-# Production executable (clean version without verbose output)
-add_executable(production_secure_message
-    src/production_main.cpp
-    src/interactive_secure_message.cpp
-    src/secure_message.cpp
-)
+# Set export definitions for JNI library
+if(WIN32)
+    set_target_properties(secure_crypto_jni PROPERTIES 
+        WINDOWS_EXPORT_ALL_SYMBOLS TRUE
+    )
+endif()
 
-# Link libraries
-target_link_libraries(secure_message OpenSSL::SSL OpenSSL::Crypto)
-target_link_libraries(test_secure_message OpenSSL::SSL OpenSSL::Crypto)
-target_link_libraries(interactive_secure_message OpenSSL::SSL OpenSSL::Crypto)
-target_link_libraries(production_secure_message OpenSSL::SSL OpenSSL::Crypto)
+# Link libraries for core
+target_link_libraries(secure_crypto_core OpenSSL::SSL OpenSSL::Crypto)
+
+# Link libraries for executable
+target_link_libraries(secure_crypto secure_crypto_core OpenSSL::SSL OpenSSL::Crypto)
+
+# Link libraries for JNI library
+target_link_libraries(secure_crypto_jni secure_crypto_core OpenSSL::SSL OpenSSL::Crypto)
 
 if(WIN32)
-    target_link_libraries(secure_message ws2_32 crypt32)
-    target_link_libraries(test_secure_message ws2_32 crypt32)
-    target_link_libraries(interactive_secure_message ws2_32 crypt32)
-    target_link_libraries(production_secure_message ws2_32 crypt32)
+    target_link_libraries(secure_crypto ws2_32 crypt32)
+    target_link_libraries(secure_crypto_jni ws2_32 crypt32)
 endif()

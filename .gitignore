@@ -5,6 +5,38 @@ Debug/
 x64/
 x86/
 out/
+target/
+
+# Java compiled classes
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# Maven/Gradle
+.m2/
+.gradle/
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE files (Java)
+.idea/
+*.iws
+*.iml
+*.ipr
+.project
+.classpath
+.settings/
+bin/
 
 # Visual Studio files
 .vs/
@@ -40,6 +72,10 @@ Makefile
 *.temp
 *.log
 *.tlog
+hs_err_pid*.log
+
+# JNI generated headers (optional - you might want to track these)
+# include/*.h
 
 # IDE files
 .vscode/settings.json
@@ -84,6 +120,10 @@ test_output/
 *.pfx
 secrets.txt
 config.json
+
+# Test and demo files (optional)
+# *.demo
+# test_keys.txt
 
 # Documentation build
 docs/_build/
