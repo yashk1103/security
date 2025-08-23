@@ -1,4 +1,4 @@
-[JNI implementation](https://github.com/yashk1103/Secure-Vault/blob/main/doc.md#jni-working-changes-made-to-core-program)
+[JNI implementation](https://github.com/yashk1103/security/blob/main/doc.md#jni-working-changes-made-to-core-program)
 
 ## First Implementation
 
